@@ -1,5 +1,6 @@
 require "takuhai_status/version"
+require "takuhai_status/japanpost"
 
 module TakuhaiStatus
-  # Your code goes here...
+	class NotMyKey < StandardError; end
 end
