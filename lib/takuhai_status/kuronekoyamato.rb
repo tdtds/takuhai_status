@@ -3,7 +3,7 @@ require 'nokogiri'
 
 module TakuhaiStatus
 	class KuronekoYamato
-		attr_reader :time, :state
+		attr_reader :key, :time, :state
 
 		def initialize(key)
 			@key = key.gsub(/[^0-9]/, '')
