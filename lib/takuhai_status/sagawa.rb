@@ -18,21 +18,20 @@ module TakuhaiStatus
 
 			begin
 				table = doc.css('#detail-1 table').first
-				if table.css('tr td')[7].text == 'お問い合わせNo.をお確かめ下さい。'
+				state_raw = table.css('tr td')[7]
+				if state_raw.text == 'お問い合わせNo.をお確かめ下さい。'
 					raise NotMyKey.new('invalid key')
 				end
-				if table.css('tr td')[7].text == 'お問い合わせのデータは登録されておりません。'
+				if state_raw.text == 'お問い合わせのデータは登録されておりません。'
 					raise NotMyKey.new('not entry yet')
 				end
 
-				time = Time.now
-				state = table.css('tr td')[7].text
-				[4, 2, 1].each do |offset|
-					begin
-						time = Time.parse(table.css('tr td')[offset].text)
-						break
-					rescue ArgumentError # invalid time format
-					end
+				state = state_raw.children.map(&:text).first.sub(/^[^0-9]+/, '')
+
+				begin
+					time = Time.parse(state.sub(/年/, '-').sub(/月/, '-').sub(/日/, ''))
+				rescue ArgumentError
+					time = Time.parse(table.css('tr td')[1].text) rescue Time.now
 				end
 				return time, state
 			rescue NoMethodError
