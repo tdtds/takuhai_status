@@ -10,6 +10,10 @@ module TakuhaiStatus
 			@time, @state = check
 		end
 
+		def finish?
+			return @state == 'お届け先にお届け済み'
+		end
+
 	private
 		def check
 			uri = "https://trackings.post.japanpost.jp/services/srv/search/direct?reqCodeNo1=#{@key}"

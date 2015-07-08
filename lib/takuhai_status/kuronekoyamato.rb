@@ -10,6 +10,10 @@ module TakuhaiStatus
 			@time, @state = check
 		end
 
+		def finish?
+			return @state == '配達完了'
+		end
+
 	private
 		def check
 			conn = Faraday.new(url: 'http://toi.kuronekoyamato.co.jp/')
