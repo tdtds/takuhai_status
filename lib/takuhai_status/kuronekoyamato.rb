@@ -11,7 +11,7 @@ module TakuhaiStatus
 		end
 
 		def finish?
-			return @state == '配達完了'
+			return !!(@state =~ /^(配達|投函)完了$/)
 		end
 
 	private
