@@ -31,6 +31,7 @@ module TakuhaiStatus
 				end
 
 				state = state_raw.children.map(&:text).first.sub(/^[^0-9]+/, '')
+				state = state_raw.children.map(&:text).first if state.empty?
 
 				begin
 					time = Time.parse(state.sub(/年/, '-').sub(/月/, '-').sub(/日/, ''))
