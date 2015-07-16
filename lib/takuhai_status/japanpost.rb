@@ -6,7 +6,7 @@ module TakuhaiStatus
 		attr_reader :key, :time, :state
 
 		def initialize(key)
-			@key = key.gsub(/[^0-9]/, '')
+			@key = key.gsub(/[^a-zA-Z0-9]/, '')
 			@time, @state = check
 		end
 
