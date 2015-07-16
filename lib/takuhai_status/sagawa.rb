@@ -22,21 +22,23 @@ module TakuhaiStatus
 
 			begin
 				table = doc.css('#detail-1 table').first
-				state_raw = table.css('tr td')[7]
-				if state_raw.text == 'お問い合わせNo.をお確かめ下さい。'
+				state_line = table.css('tr td')[7].children.map(&:text).first
+				if state_line == 'お問い合わせNo.をお確かめ下さい。'
 					raise NotMyKey.new('invalid key')
 				end
-				if state_raw.text == 'お問い合わせのデータは登録されておりません。'
+				if state_line == 'お問い合わせのデータは登録されておりません。'
 					raise NotMyKey.new('not entry yet')
 				end
 
-				state = state_raw.children.map(&:text).first.sub(/^[^0-9]+/, '')
-				state = state_raw.children.map(&:text).first if state.empty?
+				state = state_line.split(/[ \u{a0}]+/).last
 
 				begin
-					time = Time.parse(state.sub(/年/, '-').sub(/月/, '-').sub(/日/, ''))
+					s = state_line.sub(/^[^0-9]+/, '')
+					s = state_line if s.empty?
+					time = Time.parse(s.gsub(/[^0-9 :]/, '-'))
 				rescue ArgumentError
-					time = Time.parse(table.css('tr td')[1].text) rescue Time.now
+					ship = table.css('tr td')[1].text.strip.gsub(/[^0-9]/, '-')
+					time = Time.parse(ship) rescue Time.now
 				end
 				return time, state
 			rescue NoMethodError
