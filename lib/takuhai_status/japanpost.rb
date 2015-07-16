@@ -24,7 +24,7 @@ module TakuhaiStatus
 				col = cols[cols.size - 2]
 				stime = col.css('td')[0].text
 				time = Time.parse(stime)
-				state = col.css('td')[1].text
+				state = "#{col.css('td')[1].text} [#{col.css('td')[3].text}]"
 
 				return time, state
 			rescue NoMethodError
