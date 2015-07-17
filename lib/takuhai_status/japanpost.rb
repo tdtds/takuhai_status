@@ -24,7 +24,10 @@ module TakuhaiStatus
 				col = cols[cols.size - 2]
 				stime = col.css('td')[0].text
 				time = Time.parse(stime)
-				state = "#{col.css('td')[1].text} [#{col.css('td')[3].text}]"
+				station = " [#{col.css('td')[3].text}]"
+				station = " [#{col.css('td')[4].text.strip}]" if station.size <= 4
+				station = "" if station.size <= 4
+				state = "#{col.css('td')[1].text}#{station}"
 
 				return time, state
 			rescue NoMethodError
