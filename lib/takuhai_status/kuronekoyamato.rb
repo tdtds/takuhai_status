@@ -22,16 +22,16 @@ module TakuhaiStatus
 
 			begin
 				tr = doc.css('.meisai')[0].css('tr').last
+				state = tr.css('td')[1].text
 				sday = tr.css('td')[2].text
 				stime = tr.css('td')[3].text
 				time = Time.parse("#{sday} #{stime}")
-				state = tr.css('td')[1].text
 
 				return time, state
 			rescue NoMethodError
 				raise NotMyKey
 			rescue ArgumentError
-				return Time.now, ''
+				return Time.now, state || ''
 			end
 		end
 	end
