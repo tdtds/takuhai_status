@@ -11,7 +11,7 @@ module TakuhaiStatus
 		end
 
 		def finish?
-			return !!(@state =~ /^(お客様引渡|配達|投函)完了/)
+			return !!(@state =~ /^(お客様引渡|配達|投函)完了|返品/)
 		end
 
 	private
