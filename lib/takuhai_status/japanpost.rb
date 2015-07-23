@@ -11,7 +11,7 @@ module TakuhaiStatus
 		end
 
 		def finish?
-			return !!(@state =~ /差出人に返送済み|お届け先にお届け済み|コンビニエンスストアに引渡|窓口でお渡し/)
+			return !!(@state =~ /差出人に返送済み|お届け済み|コンビニエンスストアに引渡|窓口でお渡し/)
 		end
 
 	private
