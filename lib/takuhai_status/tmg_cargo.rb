@@ -31,6 +31,7 @@ module TakuhaiStatus
 			doc = Nokogiri(res.body)
 			begin
 				state = doc.css('#list tr td')[2].text.strip
+				raise if state =~ /お荷物情報が見つかりません/
 				return Time.now, state
 			rescue
 				raise NotMyKey
