@@ -13,7 +13,7 @@ module TakuhaiStatus
 		end
 
 		def finish?
-			return false
+			return !!(@state == '配達完了')
 		end
 
 	private
