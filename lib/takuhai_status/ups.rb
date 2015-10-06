@@ -11,7 +11,7 @@ module TakuhaiStatus
 		end
 
 		def finish?
-			return !!(@state =~ /配達済み|配達しました/)
+			return !!(@state =~ /配達済み/)
 		end
 
 	private
@@ -24,8 +24,8 @@ module TakuhaiStatus
 
 			begin
 				state = doc.css('.newstatus #ttc_tt_spStatus h3')[0].text.strip
-				time = "#{doc.css('.secHead ul li')[0].text.match(/\d{4}\/\d{2}\/\d{2} \d{1,2}:\d{2}/)[0]}+5000)"
-				return Time.parse(time), state
+				time = "#{doc.css('.secHead ul li')[0].text.match(/\d{4}\/\d\d\/\d\d \d{1,2}:\d\d/)[0]}+0500)"
+				return Time.parse(time).localtime, state
 			rescue NoMethodError
 				raise NotMyKey
 			rescue ArgumentError
