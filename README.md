@@ -1,6 +1,6 @@
 # TakuhaiStatus
 
-世界の宅配便の配達ステータスを統一的に得る
+日本国内外の宅配便の配達ステータスを統一的に得る
 
 ## Installation
 
@@ -20,7 +20,18 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+require 'takuhai_status'
+
+code = '123456789012' # code of a devivery service
+s = TakuhaiStatus.scan(code) #=> an instance of services
+s.stat    #=> status string of this service as String
+s.time    #=> Time instance of status changed
+s.finish? #=> dose the cargo derivering finished?
+
+# or make new instance of a service directly
+s = TakuhaiStatus::KuronekoYamato.new(code)
+```
 
 ## Development
 
