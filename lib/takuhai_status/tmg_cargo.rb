@@ -13,7 +13,7 @@ module TakuhaiStatus
 		end
 
 		def finish?
-			return !!(@state == '配達完了')
+			return !!(@state =~ /配達完了|返品/)
 		end
 
 	private
