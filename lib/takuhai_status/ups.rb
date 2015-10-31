@@ -16,7 +16,7 @@ module TakuhaiStatus
 
 	private
 		def check
-			uri = "http://www.ups.com/WebTracking/processInputRequest?loc=ja_JP&Requester=NES&tracknum=#{@key}"
+			uri = "https://www.ups.com/WebTracking/processInputRequest?loc=ja_JP&Requester=NES&tracknum=#{@key}"
 			html = open(uri, &:read)
 			# HTML中に謎の大量ヌル文字が含まれていてnokogiriのパースが止まる対策
 			html.gsub!(/\u0000/,'')
