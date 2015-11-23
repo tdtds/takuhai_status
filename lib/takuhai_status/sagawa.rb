@@ -11,7 +11,7 @@ module TakuhaiStatus
 		end
 
 		def finish?
-			return !!(@state =~ /営業所へお問い合わせ下さい。|配達は終了致しました。$/)
+			return !!(@state =~ /営業所へお問い合わせ下さい。|配達は終了致しました。$|^配達完了/)
 		end
 
 	private
@@ -21,28 +21,21 @@ module TakuhaiStatus
 			doc = Nokogiri(res.body)
 
 			begin
-				table = doc.css('#detail-1 table').first
-				state_line = table.css('tr td')[7].children.map(&:text).first
-				if state_line == 'お問い合わせNo.をお確かめ下さい。'
-					raise NotMyKey.new('invalid key')
-				end
-				if state_line == 'お問い合わせのデータは登録されておりません。'
-					raise NotMyKey.new('not entry yet')
-				end
-
-				state = state_line.split(/[ \u{a0}]+/).last
-
-				begin
-					s = state_line.sub(/^[^0-9]+/, '')
-					s = state_line if s.empty?
-					time = Time.parse(s.gsub(/[^0-9 :]/, '-'))
-				rescue ArgumentError
-					ship = table.css('tr td')[1].text.strip.gsub(/[^0-9]/, '-')
-					time = Time.parse(ship) rescue Time.now
-				end
+				cells = doc.css('.table_okurijo_detail2').css('tr').last.css('td')
+				state = "#{cells[0].text.strip} [#{cells[2].text.strip}]".sub(/^./, '')
+				time = Time.parse(cells[1].text.strip)
 				return time, state
 			rescue NoMethodError
-				raise NotMyKey.new('invalid response')
+				begin
+					time = Time.now
+					state = doc.css('.table_okurijo_detail').first.css('tr').last.css('td').text.strip
+					if state == '恐れ入りますが、お問い合せ送り状NOをお確かめください。'
+						raise NotMyKey.new('invalid key')
+					end
+					return time, state
+				rescue NoMethodError
+					raise NotMyKey.new('invalid response')
+				end
 			rescue ArgumentError
 				return Time.now, ''
 			end
