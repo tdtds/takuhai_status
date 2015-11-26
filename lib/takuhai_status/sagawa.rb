@@ -25,11 +25,11 @@ module TakuhaiStatus
 				state = "#{cells[0].text.strip} [#{cells[2].text.strip}]".sub(/^./, '')
 				time = Time.parse(cells[1].text.strip)
 				return time, state
-			rescue NoMethodError
+			rescue NoMethodError # detail2 table not found, use detail table
 				begin
 					time = Time.now
 					state = doc.css('.table_okurijo_detail').first.css('tr').last.css('td').text.strip
-					if state == '恐れ入りますが、お問い合せ送り状NOをお確かめください。'
+					if state =~ /恐れ入りますが、お問い合せ送り状NOをお確かめください。|お荷物データが登録されておりません。/
 						raise NotMyKey.new('invalid key')
 					end
 					return time, state
