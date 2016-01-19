@@ -24,7 +24,11 @@ module TakuhaiStatus
 
 			begin
 				state = doc.css('.newstatus #ttc_tt_spStatus h3')[0].text.strip
-				time = "#{doc.css('.secHead ul li')[0].text.match(/\d{4}\/\d\d\/\d\d \d{1,2}:\d\d/)[0]}+0500)"
+				begin
+					time = "#{doc.css('.secHead ul li')[0].text.match(/\d{4}\/\d\d\/\d\d \d{1,2}:\d\d/)[0]}+0500)"
+				rescue NoMethodError
+					time = "#{doc.css('.secHead ul li')[0].text.match(/\d{4}\/\d\d\/\d\d/)[0]} 00:00:00+0500)"
+				end
 				return Time.parse(time).localtime, state
 			rescue NoMethodError
 				raise NotMyKey
