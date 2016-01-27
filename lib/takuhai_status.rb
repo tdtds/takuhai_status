@@ -10,7 +10,7 @@ module TakuhaiStatus
 	class NotMyKey < StandardError; end
 
 	def self.scan(key)
-		[JapanPost, KuronekoYamato, Sagawa, TMGCargo, UPS].each do |service|
+		[Sagawa, JapanPost, KuronekoYamato, TMGCargo, UPS].each do |service|
 			begin
 				return service.new(key)
 			rescue NotMyKey
