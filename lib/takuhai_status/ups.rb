@@ -23,7 +23,7 @@ module TakuhaiStatus
 			doc = Nokogiri::HTML.parse(html, uri, "utf-8")
 
 			begin
-				state = doc.css('.newstatus #ttc_tt_spStatus h3')[0].text.strip
+				state = doc.css('.newstatus h3')[0].text.strip
 				begin
 					time = "#{doc.css('.secHead ul li')[0].text.match(/\d{4}\/\d\d\/\d\d \d{1,2}:\d\d/)[0]}+0500)"
 				rescue NoMethodError
