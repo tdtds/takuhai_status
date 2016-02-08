@@ -20,14 +20,25 @@ module TakuhaiStatus
 			doc = Nokogiri(open(uri, &:read))
 
 			begin
-				cols = doc.css('.tableType01')[1].css('tr')
-				col = cols[cols.size - 2]
-				stime = col.css('td')[0].text
-				time = Time.parse(stime)
-				station = " [#{col.css('td')[3].text}]"
-				station = " [#{col.css('td')[4].text.strip}]" if station.size <= 4
-				station = "" if station.size <= 4
-				state = "#{col.css('td')[1].text}#{station}"
+				begin
+					# japanese baggage
+					cols = doc.css('.tableType01')[1].css('tr')
+					col = cols[cols.size - 2]
+					stime = col.css('td')[0].text
+					time = Time.parse(stime)
+					station = " [#{col.css('td')[3].text}]"
+					station = " [#{col.css('td')[4].text.strip}]" if station.size <= 4
+					station = "" if station.size <= 4
+					state = "#{col.css('td')[1].text}#{station}"
+				rescue NoMethodError
+					# international baggage
+					cols = doc.css('.tableType01 tr')
+					col = cols[cols.size - 2]
+					stime = col.css('td')[2].text
+					time = Time.parse(stime)
+					station = " [#{col.css('td')[4].text}/#{col.css('td')[5].text}]"
+					state = "#{col.css('td')[3].text}#{station}"
+				end
 
 				return time, state
 			rescue NoMethodError
