@@ -4,6 +4,7 @@ require "takuhai_status/kuronekoyamato"
 require "takuhai_status/sagawa"
 require "takuhai_status/tmg_cargo"
 require "takuhai_status/ups"
+require "takuhai_status/fedex"
 
 module TakuhaiStatus
 	class NotFound < StandardError; end
@@ -19,7 +20,7 @@ module TakuhaiStatus
 	def self.scan(key)
 		services = []
 		[].tap{|threads|
-			[Sagawa, JapanPost, KuronekoYamato, TMGCargo, UPS].each do |service|
+			[Sagawa, JapanPost, KuronekoYamato, TMGCargo, UPS, FedEx].each do |service|
 				threads.push(Thread.new{service.new(key)})
 			end
 		}.each{|thread|
