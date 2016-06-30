@@ -6,7 +6,7 @@ module TakuhaiStatus
 		attr_reader :key, :time, :state
 
 		def initialize(key)
-			@key = key.gsub(/[^0-9]/, '')
+			@key = key
 			@time, @state = check
 		end
 
@@ -43,29 +43,23 @@ module TakuhaiStatus
 				version: '1',
 				format: 'json'
 			})
-			begin
-				data = JSON.parse(res.body)
-				raise unless data["TrackPackagesResponse"]["successful"]
 
-				package = data["TrackPackagesResponse"]["packageList"].first
-				current = package["scanEventList"].first
-
-				begin
-					time = Time.parse("#{current['date']} #{current['time']}#{current['+09:00']}")
-				rescue ArgumentError
-					raise NotMyKey.new('no time status in the package');
-				end
-
-				state = "#{current['status']}"
-				state = "#{state}(#{current['scanDetails']})" if current['scanDetails'].size > 0
-				state = "#{state} - #{current['scanLocation']}" if current['scanLocation'].size > 0
-
-				return time, state
-			rescue NotMyKey
-				raise
-			rescue
-				return (@time || Time.now), (@state || '')
+			package = JSON.parse(res.body)["TrackPackagesResponse"]
+			unless package["successful"]
+				raise NotMyKey.new(package["errorList"].first["message"])
 			end
+
+			current = package["packageList"].first["scanEventList"].first
+
+			t_str = "#{current['date']} #{current['time']}"
+			raise NotMyKey.new('no time status in the package') if t_str.size == 1
+			time = Time.parse("#{t_str}+09:00")
+
+			state = "#{current['status']}"
+			state = "#{state}(#{current['scanDetails']})" if current['scanDetails'].size > 0
+			state = "#{state} - #{current['scanLocation']}" if current['scanLocation'].size > 0
+
+			return time, state
 		end
 	end
 end
