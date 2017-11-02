@@ -6,6 +6,9 @@ require "takuhai_status/tmg_cargo"
 require "takuhai_status/ups"
 require "takuhai_status/fedex"
 
+require "logger"
+require "timeout"
+
 module TakuhaiStatus
 	class NotFound < StandardError; end
 	class NotMyKey < StandardError; end
@@ -17,11 +20,21 @@ module TakuhaiStatus
 		end
 	end
 
-	def self.scan(key)
+	def self.scan(key, timeout: 10, logger: Logger.new(nil))
 		services = []
 		[].tap{|threads|
 			[Sagawa, JapanPost, KuronekoYamato, TMGCargo, UPS, FedEx].each do |service|
-				threads.push(Thread.new{service.new(key)})
+				threads.push(Thread.new{
+					name = service.to_s.sub(/^.*::/, '')
+					begin
+						Timeout.timeout(timeout, Timeout::Error, "Timeout in #{name}(#{key})") do
+							service.new(key)
+						end
+					rescue Timeout::Error, Faraday::TimeoutError => e
+						logger.error e.message
+						raise NotMyKey.new(e.message)
+					end
+				})
 			end
 		}.each{|thread|
 			begin
