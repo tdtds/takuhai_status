@@ -27,12 +27,13 @@ module TakuhaiStatus
 				threads.push(Thread.new{
 					name = service.to_s.sub(/^.*::/, '')
 					begin
-						Timeout.timeout(timeout, Timeout::Error, "Timeout in #{name}(#{key})") do
+						Timeout.timeout(timeout, Timeout::Error) do
 							service.new(key)
 						end
-					rescue Timeout::Error, Faraday::TimeoutError => e
-						logger.error e.message
-						raise NotMyKey.new(e.message)
+					rescue Timeout::Error, Faraday::TimeoutError
+						m = "Timeout in #{name}(#{key})"
+						logger.error m
+						raise NotMyKey.new(m)
 					end
 				})
 			end
