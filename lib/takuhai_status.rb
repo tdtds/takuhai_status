@@ -25,6 +25,7 @@ module TakuhaiStatus
 		[].tap{|threads|
 			[Sagawa, JapanPost, KuronekoYamato, TMGCargo, UPS, FedEx].each do |service|
 				threads.push(Thread.new{
+					Thread.current.report_on_exception = false
 					name = service.to_s.sub(/^.*::/, '')
 					begin
 						Timeout.timeout(timeout, Timeout::Error) do
