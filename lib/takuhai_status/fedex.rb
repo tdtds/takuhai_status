@@ -11,7 +11,7 @@ module TakuhaiStatus
 		end
 
 		def finish?
-			return !!(@state =~ /認可済み業者に委託|配達完了/)
+			return !!(@state =~ /認可済み業者に委託|配達完了|貨物情報はFedExに送信されました/)
 		end
 
 	private
