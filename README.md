@@ -8,7 +8,7 @@
 * TMG (Amazonの荷物のみ)
 * UPS
 * FedEx (国外の移動のみ)
-
+* USPS (国外の移動のみ)
 
 ## Installation
 
