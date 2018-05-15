@@ -4,6 +4,7 @@ require 'nokogiri'
 module TakuhaiStatus
 	class Sagawa
 		attr_reader :key, :time, :state
+		TakuhaiStatus.add_service(self)
 
 		def initialize(key)
 			@key = key.gsub(/[^0-9]/, '')

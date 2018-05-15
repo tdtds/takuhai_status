@@ -4,6 +4,7 @@ require 'json'
 module TakuhaiStatus
 	class FedEx
 		attr_reader :key, :time, :state
+		TakuhaiStatus.add_service(self)
 
 		def initialize(key)
 			@key = key

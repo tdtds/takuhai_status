@@ -1,11 +1,3 @@
-require "takuhai_status/version"
-require "takuhai_status/japanpost"
-require "takuhai_status/kuronekoyamato"
-require "takuhai_status/sagawa"
-require "takuhai_status/tmg_cargo"
-require "takuhai_status/ups"
-require "takuhai_status/fedex"
-
 require "logger"
 require "timeout"
 
@@ -20,10 +12,19 @@ module TakuhaiStatus
 		end
 	end
 
+	# loading plugins
+	@@services = []
+	def self.add_service(service_name)
+		@@services << service_name
+	end
+	Dir.glob("#{File.dirname(__FILE__)}/takuhai_status/*.rb") do |plugin|
+		require plugin
+	end
+
 	def self.scan(key, timeout: 10, logger: Logger.new(nil))
 		services = []
 		[].tap{|threads|
-			[Sagawa, JapanPost, KuronekoYamato, TMGCargo, UPS, FedEx].each do |service|
+			@@services.each do |service|
 				threads.push(Thread.new{
 					if Thread.method_defined?(:report_on_exception)
 						Thread.current.report_on_exception = false

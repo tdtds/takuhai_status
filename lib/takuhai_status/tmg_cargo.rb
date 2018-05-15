@@ -5,6 +5,7 @@ require 'nokogiri'
 module TakuhaiStatus
 	class TMGCargo
 		attr_reader :key, :time, :state
+		TakuhaiStatus.add_service(self)
 		@@conn = nil
 
 		def initialize(key)
