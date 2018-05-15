@@ -4,6 +4,7 @@ require 'nokogiri'
 module TakuhaiStatus
 	class JapanPost
 		attr_reader :key, :time, :state
+		TakuhaiStatus.add_service(self)
 
 		def initialize(key)
 			@key = key.gsub(/[^a-zA-Z0-9]/, '')
