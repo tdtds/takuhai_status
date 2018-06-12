@@ -9,7 +9,8 @@ module TakuhaiStatus
 		@@conn = nil
 
 		def initialize(key)
-			@key = key.gsub(/[^a-zA-Z0-9]/, '')
+			@key = key.strip
+			raise NotMyKey.new('invalid key format') unless @key =~ /\A[a-zA-Z0-9]+\Z/
 			@time, @state = check
 		end
 
