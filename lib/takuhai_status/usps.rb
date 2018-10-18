@@ -21,9 +21,9 @@ module TakuhaiStatus
 			url = "https://tools.usps.com/go/TrackConfirmAction?tLabels=#{@key}"
 			html = Faraday.new(url: url).get.body
 			date, status, detail = Nokogiri(html).css('div.status_feed p');
-			date_str = date.text.strip
-			status_str = status.text.gsub(/\u00A0/, ' ').strip
-			detail_str = detail.text.gsub(/\u00A0/, ' ').strip
+			date_str = date ? date.text.strip : ''
+			status_str = status ? status.text.gsub(/\u00A0/, ' ').strip : ''
+			detail_str = detail ? detail.text.gsub(/\u00A0/, ' ').strip : ''
 
 			unless date_str.empty?
 				return Time.parse(date_str), "#{status_str} (#{detail_str})"
