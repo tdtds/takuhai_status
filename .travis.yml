@@ -1,4 +1,13 @@
 language: ruby
+sudo: false
+cache: bundler
+before_install:
+- gem install bundler -v '> 1.5.0'
 rvm:
-  - 2.2.2
-before_install: gem install bundler -v 1.10.5
+- 2.5.2
+deploy:
+  provider: rubygems
+  api_key:
+    secure: anktbhiTQ2FuZn7EqJBVVCyJjMMXKz2f25ETuqMlriKOCYcKEUKtCGo91F69oxf6SAkAkZCARqTF0IxUrpadiU+x+7n0FD3x2s4BMQqvvPpLPM5sUgAZXIZGsNyfi5Pi5E9HIQ/yuKAAzuNPIlcfVo3f3Os9b/gOICr5j7NcyD6h5zU6qDEW7fskc3HA9w0DDhcxARzGl/O9wiU7NJBNVZQO25/9e1N412VlI3F8+EtLMDeHf3GgHaqwBGIdMLEvN+tb9poA4oLz1Koz3YqgHVMpHrCWWHyLIZ1FmrdhF0gLq4G0Kuas9Nrr3deAh8jAqkX/UMt4WOoOjzi9H/xb6F2CfgAq74FOdOf1SpZkpmFAiC+vtDrGJxgpNQMpoqZ8NdRSfGbEy27HlCznSYZaCm6B9KX7PdstBaqIYJGfByAktgGQnLOIIW24TJpPasMOMmG6r5o2J31fdCv4e8gWoUSRvsJmE7vS8RsL5bG6BtiEqh4akpriBQS8dQ+b2orPQ60yEcRMQVP7E7V0mhzO88j0/Cm+mhjmVo9DPd6PTEMTMOKaYCGR15PUQFmYl11f9WFMKLLzhcUBjDR6ltnDtH5Vow4AUk9oPbPbVLHk1EzM3CsPrmOMie1jlPAZyNhkpTKg385Wq5CSAVcgeLQs2wxABbrB1hJqJlf8K8zy2vU=
+  on:
+    tags: true
