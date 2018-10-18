@@ -25,7 +25,7 @@ module TakuhaiStatus
 			begin
 				cells = doc.css('.table_okurijo_detail2').css('tr').last.css('td')
 				state = "#{cells[0].text.strip} [#{cells[2].text.strip}]".sub(/^./, '')
-				time = Time.parse(cells[1].text.strip)
+				time = Time.parse(cells[1].text.strip) rescue Time.now
 				return time, state
 			rescue NoMethodError # detail2 table not found, use detail table
 				begin
