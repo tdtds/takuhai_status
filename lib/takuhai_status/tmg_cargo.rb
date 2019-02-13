@@ -1,5 +1,6 @@
 require 'faraday'
 require 'faraday/cookie_jar'
+require 'faraday_middleware'
 require 'nokogiri'
 
 module TakuhaiStatus
@@ -22,6 +23,7 @@ module TakuhaiStatus
 		def check
 			@@conn = Faraday.new(url: 'https://track-a.tmg-group.jp'){|builder|
 				builder.use :cookie_jar
+				builder.use FaradayMiddleware::FollowRedirects
 				builder.request :url_encoded
 				builder.adapter :net_http
 			} unless @@conn

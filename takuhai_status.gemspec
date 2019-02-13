@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "faraday"
   spec.add_runtime_dependency "mechanize"
   spec.add_runtime_dependency "faraday-cookie_jar"
+  spec.add_runtime_dependency "faraday_middleware"
 
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake", "~> 10.0"
