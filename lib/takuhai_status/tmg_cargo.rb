@@ -22,13 +22,14 @@ module TakuhaiStatus
 	private
 		def check
 			@@conn = Faraday.new(url: 'https://track-a.tmg-group.jp'){|builder|
+			#@@conn = Faraday.new(url: 'https://track-a.tmg-tms.com'){|builder|
 				builder.use :cookie_jar
 				builder.use FaradayMiddleware::FollowRedirects
 				builder.request :url_encoded
 				builder.adapter :net_http
 			} unless @@conn
-			@@conn.get('/cts/TmgCargoSearchAction.do')
-			res = @@conn.post('/cts/TmgCargoSearchAction.do', {
+			top = @@conn.get('/cts/TmgCargoSearchAction.do')
+			res = @@conn.post(top.env.url, { # replace with redirected url
 				'inputData[0].inq_no' => @key,
 				'method_id' => 'POPUPSEA'
 			})
