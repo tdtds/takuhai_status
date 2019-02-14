@@ -21,8 +21,7 @@ module TakuhaiStatus
 
 	private
 		def check
-			@@conn = Faraday.new(url: 'https://track-a.tmg-group.jp'){|builder|
-			#@@conn = Faraday.new(url: 'https://track-a.tmg-tms.com'){|builder|
+			@@conn = Faraday.new(url: 'https://track-a.tmg-tms.com'){|builder|
 				builder.use :cookie_jar
 				builder.use FaradayMiddleware::FollowRedirects
 				builder.request :url_encoded
