@@ -36,9 +36,10 @@ module TakuhaiStatus
 			begin
 				state = doc.css('#list tr td')[2].text.strip
 				raise if state =~ /お荷物情報が見つかりません/
+				raise if state == '2' # skip error state occurs sometime
 				return Time.now, state
 			rescue
-				raise NotMyKey
+				raise NotMyKey.new(state)
 			end
 		end
 	end
