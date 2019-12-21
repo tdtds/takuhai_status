@@ -14,11 +14,21 @@ module TakuhaiStatus
 
 	# loading plugins
 	@@services = []
-	def self.add_service(service_name)
-		@@services << service_name
+	# service_class as class
+	def self.add_service(service_class)
+		@@services << service_class
 	end
 	Dir.glob("#{File.dirname(__FILE__)}/takuhai_status/*.rb") do |plugin|
 		require plugin
+	end
+
+	# service_name as symbol, cf. :USPS
+	def self.ignore_service(service_name)
+		begin
+			@@services.delete(TakuhaiStatus.const_get(service_name))
+		rescue NameError
+			return nil
+		end
 	end
 
 	def self.scan(key, timeout: 10, logger: Logger.new(nil))
