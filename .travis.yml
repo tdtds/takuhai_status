@@ -4,9 +4,9 @@ cache: bundler
 before_install:
   - gem install bundler -v '> 1.5.0'
 rvm:
-  - 2.4.5
-  - 2.5.2
-  - 2.6.0
+  - 2.4.7
+  - 2.5.7
+  - 2.6.5
 deploy:
   provider: rubygems
   api_key:
