@@ -19,7 +19,7 @@ module TakuhaiStatus
 	private
 		def check
 			uri = "https://trackings.post.japanpost.jp/services/srv/search/direct?reqCodeNo1=#{@key}"
-			doc = Nokogiri(open(uri, &:read))
+			doc = Nokogiri(URI.open(uri, &:read))
 
 			begin
 				begin
