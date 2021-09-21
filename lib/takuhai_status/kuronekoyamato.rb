@@ -20,22 +20,21 @@ module TakuhaiStatus
 		def check
 			conn = Faraday.new(url: 'http://toi.kuronekoyamato.co.jp/')
 			res = conn.post('/cgi-bin/tneko', {number00: '1', number01: @key})
-			doc = Nokogiri(res.body)
+			doc = Nokogiri(res.body.force_encoding('UTF-8'))
 
 			begin
-				tr = doc.css('.meisai')[0].css('tr').last
-				state = tr.css('td')[1].text
-				sday = tr.css('td')[2].text
-				stime = tr.css('td')[3].text
-				time = Time.parse("#{sday} #{stime}")
+				current = doc.css('.tracking-invoice-block-detail ol li').last
+				state = "#{current.css('.item').text} [#{current.css('.name').text}]"
+				month, day, hour, minute = current.css('.date').text.split(/[^\d]+/)
+				time = Time.local(Time.now.year, month, day, hour, minute)
 
-				if state == '国内到着'
-					begin
-						time, state = global_state(doc)
-					rescue
-						$stderr.puts "error in yamato global, about #{key}"
-					end
-				end
+				#if state == '国内到着'
+				#	begin
+				#		time, state = global_state(doc)
+				#	rescue
+				#		$stderr.puts "error in yamato global, about #{key}"
+				#	end
+				#end
 
 				return time, state
 			rescue NoMethodError
