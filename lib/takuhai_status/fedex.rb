@@ -45,9 +45,13 @@ module TakuhaiStatus
 				format: 'json'
 			})
 
-			package = JSON.parse(res.body)["TrackPackagesResponse"]
-			unless package["successful"]
-				raise NotMyKey.new(package["errorList"].first["message"])
+			begin
+				package = JSON.parse(res.body)["TrackPackagesResponse"]
+				unless package["successful"]
+					raise NotMyKey.new(package["errorList"].first["message"])
+				end
+			rescue JSON::ParserError
+				raise NotMyKey.new('JSON parse error')
 			end
 
 			current = package["packageList"].first["scanEventList"].first
